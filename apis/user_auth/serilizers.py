@@ -5,11 +5,12 @@ from users.models import User, UserOtp
 from users.user_utils import create_otp
 
 class UserSignupSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    # password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    name = serializers.CharField(required=True,source='first_name')
 
     class Meta:
         model = User
-        fields = ['mobile_number', 'password']
+        fields = ['mobile_number', 'name']
 
 
 class UserLoginSerializer(serializers.Serializer):
