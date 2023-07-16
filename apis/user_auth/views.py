@@ -5,6 +5,8 @@ from users.models import User,UserOtp
 from users.user_utils import create_otp
 from .serilizers import UserSignupSerializer,UserLoginSerializer,UserOtpSerializer
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.hashers import make_password
+
 
 class UserSignupView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -14,6 +16,8 @@ class UserSignupView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        user.password = make_password('User@123')
+        user.save()
 
         otp = create_otp(user)
 
