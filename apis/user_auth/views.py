@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from users.models import User,UserOtp
-from users.user_utils import create_otp
+from users.user_utils import create_otp,get_or_create_token
 from .serilizers import UserSignupSerializer,UserLoginSerializer,UserOtpSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import make_password
@@ -29,7 +29,6 @@ class UserSignupView(generics.CreateAPIView):
         return Response(response_data, status=status.HTTP_201_CREATED)
 
 
-
 class UserLoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
 
@@ -37,15 +36,12 @@ class UserLoginView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key}, status=status.HTTP_200_OK)
+        return Response({'token': get_or_create_token(user)}, status=status.HTTP_200_OK)
     
 class GetUserOtpView(generics.GenericAPIView):
     serializer_class = UserOtpSerializer
 
-
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # user = serializer.validated_data['otp']
         return Response(serializer.validated_data, status=status.HTTP_200_OK)

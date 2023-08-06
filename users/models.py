@@ -111,7 +111,7 @@ def random_pin():
 
 
 class UserOtp(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="users_otp", on_delete=models.CASCADE)
     otp = models.CharField(max_length=6,default=random_pin())
     created_at = models.DateTimeField(default=timezone.now)
     is_verified = models.BooleanField(default=False)
@@ -124,3 +124,16 @@ class UserOtp(models.Model):
         time_difference = timezone.now() - self.created_at
         # Check if the time difference is less than or equal to 30 minutes (1800 seconds)
         return time_difference.total_seconds() <= 1800
+    
+
+class AdsCollectSliver(models.Model):
+    sl_no = models.IntegerField(default=0,unique=True)
+    user = models.ForeignKey(User, related_name="users_ads_collect_silver", on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
+    active_at = models.DateTimeField(blank=True,null=True)
+    is_ready = models.BooleanField(default=False)
+    is_watched = models.BooleanField(default=False)
+    watch_at = models.DateTimeField(blank=True,null=True)
+    ads_information = models.CharField(max_length=500,blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
