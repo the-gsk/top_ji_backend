@@ -16,12 +16,7 @@ def create_silver_collective(no_,user):
         isl = 0
 
     for i in range(no_):
-        ac = AdsCollectSliver.objects.create(sl_no=(i+isl+1),user=user)
-        if ac.sl_no == 1:
-            ac.is_active = True
-            ac.active_at = timezone.now()
-            ac.is_ready = True
-            ac.save()
+        AdsCollectSliver.objects.create(sl_no=(i+isl+1),user=user)
     return True
 
 def daily_reset_silver_collective(user,lcount):

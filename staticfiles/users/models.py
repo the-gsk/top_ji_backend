@@ -127,7 +127,7 @@ class UserOtp(models.Model):
     
 
 class AdsCollectSliver(models.Model):
-    sl_no = models.IntegerField(default=0)
+    sl_no = models.IntegerField(default=0,unique=True)
     user = models.ForeignKey(User, related_name="users_ads_collect_silver", on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     active_at = models.DateTimeField(blank=True,null=True)
